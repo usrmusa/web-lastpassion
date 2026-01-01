@@ -1,20 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- 
+    NOTICE: All source code, design, and assets are the property of Musa Mgijima and Digilayn Studio.
+    Unauthorized copying, reproduction, or use of this code is strictly prohibited.
+    Copyright © 2024. All Rights Reserved.
+-->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Last Passion – Coming Soon</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+    <link rel="shortcut icon" href="favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="favicon/site.webmanifest" />
+
+    <!-- Developer Information -->
+    <meta name="author" content="Musa Mgijima">
+    <meta name="designer" content="Digilayn Studio">
+    <meta name="contact" content="https://digilayn.co.za">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --digilayn-green: #6ddf4f;
+            --primary-pink: #ff0099;
+            --dark-bg: #1a1a1a;
+            --text-light: #f4f4f4;
             --overlay: rgba(255, 255, 255, 0.9);
             --text-dark: #1a1a1a;
             --text-muted: #666666;
+            --digilayn-dark: #444; /* Darker color for less visibility */
+            --warning-yellow: #ffcc00;
         }
 
         * {
@@ -25,136 +46,366 @@
 
         body {
             font-family: 'Inter', -apple-system, sans-serif;
-            /* Background image integration */
-            background: url('img/background-white.jpg') no-repeat center center fixed;
-            background-size: cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
+            background: #fff;
             color: var(--text-dark);
-            user-select: none;
+            line-height: 1.6;
         }
 
-        .container {
-            max-width: 420px;
-            width: 100%;
-            background: var(--overlay);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            padding: 60px 30px;
-            border-radius: 24px;
+        /* Under Development Banner */
+        .dev-banner {
+            background: var(--warning-yellow);
+            color: #000;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-        }
-
-        .brand-name {
-            font-size: 10px;
+            padding: 10px;
+            font-size: 12px;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 6px;
-            color: #888;
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-
-        .status-pill {
-            display: inline-block;
-            border: 1.5px solid var(--digilayn-green);
-            color: var(--digilayn-green);
-            padding: 4px 12px;
-            border-radius: 50px;
-            font-size: 11px;
-            font-weight: 800;
-            margin-bottom: 25px;
             letter-spacing: 1px;
+            position: sticky;
+            top: 0;
+            z-index: 1100;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
         }
 
-        h1 {
-            font-size: 26px;
-            margin-bottom: 15px;
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 38px; /* Height of the banner */
+            z-index: 1000;
+        }
+
+        .logo-nav img {
+            height: 50px;
+        }
+
+        .nav-links a {
+            margin-left: 25px;
+            text-decoration: none;
+            color: #000;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 40px 0;
+            background: #f9f9f9;
+            overflow: hidden;
+        }
+
+        .hero img {
+            width: 80%;
+            max-width: 800px;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+            border-radius: 8px;
+        }
+
+        .hero p {
+            padding: 40px 20px;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        /* Product Grid */
+        .products-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            border: 1px solid #eee;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 350px;
+            background: #eee;
+            object-fit: cover;
+        }
+
+        .product-info h3 {
+            margin: 15px 0 5px;
+            font-size: 18px;
+        }
+
+        .price {
+            color: var(--primary-pink);
             font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .btn-order {
+            background: #000;
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .btn-order:hover {
+            background: var(--primary-pink);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .modal-content h2 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 3rem;
+            margin-bottom: 15px;
             color: #000;
         }
 
-        p {
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 40px;
-            font-size: 15px;
+        .modal-content p {
+            margin-bottom: 25px;
+            color: #444;
+            font-size: 1.1rem;
         }
 
-        .btn-whatsapp {
-            display: block;
-            background: #000;
-            color: #fff;
-            text-decoration: none;
-            padding: 16px 20px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 15px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            margin-bottom: 30px;
+        .modal-btns {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
         }
 
-        .btn-whatsapp:hover {
-            background: var(--digilayn-green);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(109, 223, 79, 0.3);
-        }
-
-        /* Fine Print Footer */
-        .fine-print {
-            font-size: 10px;
-            color: #bbb;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .fine-print a {
-            color: #aaa;
+        .btn-modal {
+            padding: 12px 25px;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: 700;
-            transition: color 0.2s;
+            text-transform: uppercase;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s;
         }
 
-        .fine-print a:hover {
-            color: var(--digilayn-green);
+        .btn-wa {
+            background: #25D366;
+            color: #fff;
+            border: none;
         }
 
-        @media (max-width: 480px) {
-            .container { padding: 45px 20px; }
-            h1 { font-size: 22px; }
+        .btn-wa:hover {
+            background: #128C7E;
+        }
+
+        .btn-close {
+            background: #eee;
+            color: #000;
+            border: none;
+        }
+
+        .btn-close:hover {
+            background: #ddd;
+        }
+
+        footer {
+            background: #000;
+            color: #fff;
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .digilayn-link {
+            color: var(--digilayn-dark);
+            text-transform: uppercase;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: 1px;
+            font-size: 10px;
+            transition: color 0.3s;
+        }
+
+        .digilayn-link:hover {
+            color: #666;
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+                padding: 15px 5%;
+                top: 54px; /* Adjust for banner height on small screens */
+            }
+            .nav-links {
+                margin-top: 15px;
+                display: flex;
+                justify-content: space-around;
+                width: 100%;
+            }
+            .nav-links a {
+                margin-left: 0;
+                font-size: 12px;
+            }
+            .hero img {
+                width: 100%;
+                border-radius: 0;
+            }
+            .hero {
+                padding: 0;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="brand-name">Last Passion</div>
-    <div class="status-pill">UPGRADING</div>
+<div class="dev-banner">
+    🚧 Under Development: We're still building, but feel free to browse our progress! 🚧
+</div>
 
-    <h1>Back Online Shortly</h1>
+<nav>
+    <div class="logo-nav">
+        <img src="img/lastpassion.jpg" alt="Last Passion">
+    </div>
+    <div class="nav-links">
+        <a href="#" class="shop-trigger">Shop</a>
+        <a href="https://web.facebook.com/MpahlaKoKasi/photos_by">Collections</a>
+        <a href="https://wa.me/27699671746">WhatsApp</a>
+    </div>
+</nav>
 
-    <p>
-        We are performing scheduled maintenance to enhance your experience. Contact us directly for urgent orders.
-    </p>
+<section class="hero">
+    <img src="img/lastpassion.jpg" alt="Last Passion Banner">
+    <p>Premium Streetwear for the Passionate.</p>
+</section>
 
-    <a href="https://wa.me/27699671746" class="btn-whatsapp">
-        WhatsApp Support
-    </a>
+<div class="products-container">
+    <!-- Product 1 -->
+    <div class="product-card">
+        <img src="img/SignatureTee.jpg" alt="Signature Tee" class="product-img">
+        <div class="product-info">
+            <h3>Signature Tee</h3>
+            <p class="price">R -.00</p>
+            <a href="#" class="btn-order order-trigger" data-product="Signature Tee">Order</a>
+        </div>
+    </div>
 
-    <div class="fine-print">
-        Digital Architecture by <a href="https://digilayn.co.za">Digilayn Studio</a>
+    <!-- Product 2 -->
+    <div class="product-card">
+        <img src="img/hoodie.jpg" alt="Last Passion Hoodie" class="product-img">
+        <div class="product-info">
+            <h3>Last Passion Hoodie</h3>
+            <p class="price">R -.00</p>
+            <a href="#" class="btn-order order-trigger" data-product="Last Passion Hoodie">Order</a>
+        </div>
     </div>
 </div>
 
-<script>
-    // Security: Disable right click & copy
-    document.addEventListener("contextmenu", e => e.preventDefault());
-    document.addEventListener("copy", e => e.preventDefault());
-</script>
+<!-- Sabali Modal -->
+<div class="modal-overlay" id="sabaliModal">
+    <div class="modal-content">
+        <h2>Sabali (Patience)</h2>
+        <p>Our website is still under development, but we're ready to assist you via WhatsApp!</p>
+        <div class="modal-btns">
+            <a href="https://wa.me/27699671746" class="btn-modal btn-wa" id="waLink">WhatsApp Us</a>
+            <button class="btn-modal btn-close" id="closeModal">Close</button>
+        </div>
+    </div>
+</div>
 
+<footer>
+    <div class="brand-name" style="color: #fff;">Last Passion</div>
+    <p style="color: #888; margin-top: 10px;">&copy; 2024 Last Passion Clothing. All Rights Reserved.</p>
+    <div class="fine-print" style="margin-top: 20px;">
+        <a href="https://digilayn.co.za" class="digilayn-link">DIGILAYN STUDIO</a>
+    </div>
+</footer>
+
+<script>
+    console.log("%cDeveloped by Musa Mgijima", "color: #ff0099; font-size: 20px; font-weight: bold;");
+    console.log("%cReach me at Digilayn Studio: https://digilayn.co.za", "color: #888; font-size: 14px;");
+    console.log("%cNOTICE: Unauthorized use or copying of this source code is strictly prohibited.", "color: red; font-weight: bold;");
+
+    // Sabali Modal Logic
+    const modal = document.getElementById('sabaliModal');
+    const closeBtn = document.getElementById('closeModal');
+    const shopTrigger = document.querySelector('.shop-trigger');
+    const orderTriggers = document.querySelectorAll('.order-trigger');
+    const waLink = document.getElementById('waLink');
+
+    const showModal = (productName = '') => {
+        if (productName) {
+            waLink.href = `https://wa.me/27699671746?text=I'm interested in the ${productName}`;
+        } else {
+            waLink.href = 'https://wa.me/27699671746';
+        }
+        modal.style.display = 'flex';
+    };
+
+    const hideModal = () => {
+        modal.style.display = 'none';
+    };
+
+    shopTrigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        showModal();
+    });
+
+    orderTriggers.forEach(trigger => {
+        trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            const product = trigger.getAttribute('data-product');
+            showModal(product);
+        });
+    });
+
+    closeBtn.addEventListener('click', hideModal);
+
+    // Close on overlay click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) hideModal();
+    });
+</script>
 </body>
 </html>
