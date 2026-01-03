@@ -12,6 +12,7 @@ export class AuthViewModel {
         this.state = {
             email: '',
             password: '',
+            confirmPassword: '',
             name: '',
             username: '',
             loading: false,
@@ -47,8 +48,16 @@ export class AuthViewModel {
         // Registration specific validation
         const isNameValid = this.isRegistration ? this.state.name.trim().length > 0 : true;
         const isUsernameValid = this.isRegistration ? /^[a-z0-9_]{3,15}$/.test(this.state.username) : true;
+        const passwordsMatch = this.isRegistration ? this.state.password === this.state.confirmPassword : true;
 
-        this.state.isValid = isEmailValid && isPasswordValid && isNameValid && isUsernameValid;
+        this.state.isValid = isEmailValid && isPasswordValid && isNameValid && isUsernameValid && passwordsMatch;
+        
+        // Optionally set an error if they don't match and confirmPassword is not empty
+        if (this.isRegistration && this.state.confirmPassword.length > 0 && this.state.password !== this.state.confirmPassword) {
+            this.state.error = "Passwords do not match";
+        } else if (this.state.error === "Passwords do not match") {
+            this.state.error = null;
+        }
     }
 
     async login() {

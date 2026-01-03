@@ -105,6 +105,10 @@
         <label>Password</label>
         <input type="password" id="password" placeholder="Create a password (min 6 chars)">
     </div>
+    <div class="form-group" style="text-align: left;">
+        <label>Confirm Password</label>
+        <input type="password" id="confirmPassword" placeholder="Confirm your password">
+    </div>
     
     <button class="auth-btn" id="registerBtn" disabled>Register</button>
     
@@ -130,6 +134,7 @@
     const usernameInput = document.getElementById('username');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
     const registerBtn = document.getElementById('registerBtn');
     const errorMessage = document.getElementById('errorMessage');
 
@@ -157,6 +162,7 @@
     usernameInput.addEventListener('input', (e) => viewModel.updateField('username', e.target.value));
     emailInput.addEventListener('input', (e) => viewModel.updateField('email', e.target.value));
     passwordInput.addEventListener('input', (e) => viewModel.updateField('password', e.target.value));
+    confirmPasswordInput.addEventListener('input', (e) => viewModel.updateField('confirmPassword', e.target.value));
 
     registerBtn.addEventListener('click', async () => {
         const result = await viewModel.register();
