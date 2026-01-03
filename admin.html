@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+    NOTICE: All source code, design, and assets are the property of Musa Mgijima and Digilayn Studio.
+    Unauthorized copying, reproduction, or use of this code is strictly prohibited.
+    Copyright © 2024. All Rights Reserved.
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Last Passion – Admin Dashboard</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+    <link rel="shortcut icon" href="favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+    <link rel="manifest" href="favicon/site.webmanifest" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--outline);
+            padding-bottom: 10px;
+        }
+        .admin-header h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            letter-spacing: 1px;
+            color: var(--on-background);
+        }
+        .admin-card {
+            background: var(--surface);
+            border: 1px solid var(--outline);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            color: var(--on-surface);
+        }
+        .admin-card h2, .admin-card h3 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            color: var(--on-surface);
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .admin-btn {
+            background: var(--primary);
+            color: var(--on-primary);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        .admin-btn:hover {
+            background: var(--secondary);
+        }
+        .admin-btn:disabled {
+            background: var(--surface-variant);
+            color: var(--on-surface-variant);
+            cursor: not-allowed;
+        }
+        .product-list-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .product-list-table th, .product-list-table td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid var(--outline);
+            color: var(--on-surface);
+        }
+        .product-list-table img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-delete {
+            background: var(--error);
+            color: var(--on-error);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .btn-edit {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        /* Modal Overrides */
+        #addProductModal .modal-content, #assetModal .modal-content {
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--outline);
+            border-radius: 5px;
+            background: var(--background);
+            color: var(--on-background);
+            min-height: 80px;
+            font-family: inherit;
+        }
+        .form-group select, .controls-row select, .controls-row input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--outline);
+            border-radius: 5px;
+            background: var(--background);
+            color: var(--on-background);
+        }
+        .custom-type-input {
+            margin-top: 10px;
+            display: none;
+        }
+        .visibility-tag {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        .v-public { background: #e8f5e9; color: #2e7d32; }
+        .v-private { background: #ffebee; color: #c62828; }
+        .v-exclusive { background: #f3e5f5; color: #7b1fa2; }
+        .v-coming-soon { background: #fff3e0; color: #ef6c00; }
+
+        .image-upload-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .image-preview-slot {
+            aspect-ratio: 1;
+            border: 2px dashed var(--outline);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            background: var(--background);
+        }
+        .image-preview-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .image-preview-slot i {
+            font-size: 1.5rem;
+            color: var(--outline);
+            margin-bottom: 5px;
+        }
+        .image-preview-slot span {
+            font-size: 10px;
+            color: var(--on-surface-variant);
+        }
+        .image-preview-slot input {
+            display: none;
+        }
+
+        /* Search and Filter Controls */
+        .controls-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--on-surface-variant);
+        }
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .filter-group label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--on-surface-variant);
+            white-space: nowrap;
+        }
+
+        .assets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .asset-preview {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+            background: var(--background);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid var(--outline);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Global Loader -->
+<div id="global-loader">
+    <div class="spinner"></div>
+</div>
+
+<nav>
+    <div class="logo-nav">
+        <a href="index.html"><img src="img/lastpassion.jpg" alt="Last Passion"></a>
+    </div>
+    <div class="nav-links">
+        <a href="index.html">View Store</a>
+        <a href="#" id="logoutLink">Logout</a>
+    </div>
+</nav>
+
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>Admin Dashboard</h1>
+        <button class="admin-btn" onclick="showAddProductModal()">+ Add Product</button>
+    </div>
+
+    <!-- Site Assets Section -->
+    <div class="admin-card">
+        <h2>Site Management</h2>
+        <div class="assets-grid">
+            <div style="text-align: center;">
+                <h3>Store Logo</h3>
+                <img id="currentLogo" src="img/lastpassion.jpg" class="asset-preview" alt="Logo">
+                <button class="admin-btn" style="width: 100%;" onclick="showAssetModal('logo')">Update Logo</button>
+            </div>
+            <div style="text-align: center;">
+                <h3>Welcome Banner</h3>
+                <img id="currentBanner" src="img/lastpassion.jpg" class="asset-preview" alt="Banner">
+                <button class="admin-btn" style="width: 100%;" onclick="showAssetModal('banner')">Update Welcome Image</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Summary -->
+    <div class="form-grid" style="margin-bottom: 30px;">
+        <div class="admin-card" style="margin-bottom: 0;">
+            <h3>Total Products</h3>
+            <p id="totalProductsCount" style="font-size: 2rem; font-weight: 700;">0</p>
+        </div>
+        <div class="admin-card" style="margin-bottom: 0;">
+            <h3>Active Orders</h3>
+            <p style="font-size: 2rem; font-weight: 700;">-</p>
+        </div>
+    </div>
+
+    <!-- Product Management -->
+    <div class="admin-card">
+        <h2>Manage Inventory</h2>
+        
+        <!-- Search and Filter Controls -->
+        <div class="controls-row">
+            <div class="search-box">
+                <input type="text" id="inventorySearch" placeholder="Search by name or code..." oninput="handleFilters()">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            
+            <div class="filter-group">
+                <label>Sort By</label>
+                <select id="inventorySort" onchange="handleFilters()">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="priceLow">Price: Low to High</option>
+                    <option value="priceHigh">Price: High to Low</option>
+                    <option value="name">Name (A-Z)</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Type</label>
+                <select id="inventoryTypeFilter" onchange="handleFilters()">
+                    <option value="all">All Types</option>
+                    <!-- Dynamically filled types will appear here -->
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Status</label>
+                <select id="inventoryVisibilityFilter" onchange="handleFilters()">
+                    <option value="all">All Status</option>
+                    <option value="public">Public</option>
+                    <option value="exclusive">Exclusive</option>
+                    <option value="coming_soon">Coming Soon</option>
+                    <option value="private">Private</option>
+                </select>
+            </div>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table class="product-list-table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Code</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Type</th>
+                        <th>Visibility</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="adminProductList">
+                    <!-- Products will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Asset Update Modal -->
+<div class="modal" id="assetModal">
+    <div class="modal-content">
+        <h2 id="assetModalTitle" style="font-family: 'Bebas Neue'; margin-bottom: 20px;">Update Asset</h2>
+        <div class="form-group">
+            <label>Select New Image</label>
+            <input type="file" id="assetInput" accept="image/*">
+        </div>
+        <button class="admin-btn" id="saveAssetBtn" style="width: 100%;" onclick="saveAsset()">Upload & Update</button>
+        <button class="admin-btn" style="background: var(--surface-variant); color: var(--on-surface-variant); margin-top: 10px; width: 100%;" onclick="closeAssetModal()">Cancel</button>
+    </div>
+</div>
+
+<!-- Product Modal (Used for both Add and Edit) -->
+<div class="modal" id="addProductModal">
+    <div class="modal-content">
+        <h2 id="modalTitle" style="font-family: 'Bebas Neue'; margin-bottom: 20px;">Add New Product</h2>
+        <input type="hidden" id="editProductId">
+        <input type="hidden" id="editProductType">
+        
+        <div class="form-group">
+            <label>Product Images (At least 1 required, max 3)</label>
+            <div class="image-upload-grid">
+                <label class="image-preview-slot" id="slot1">
+                    <i class="fa-solid fa-camera"></i>
+                    <span>Main Image *</span>
+                    <input type="file" id="imgInput1" accept="image/*" onchange="previewImage(1)">
+                    <img id="prev1" style="display:none">
+                </label>
+                <label class="image-preview-slot" id="slot2">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Image 2</span>
+                    <input type="file" id="imgInput2" accept="image/*" onchange="previewImage(2)">
+                    <img id="prev2" style="display:none">
+                </label>
+                <label class="image-preview-slot" id="slot3">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Image 3</span>
+                    <input type="file" id="imgInput3" accept="image/*" onchange="previewImage(3)">
+                    <img id="prev3" style="display:none">
+                </label>
+            </div>
+        </div>
+
+        <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="form-group">
+                <label>Product Name</label>
+                <input type="text" id="prodName" placeholder="e.g. Signature Tee">
+            </div>
+            <div class="form-group">
+                <label>Product Code</label>
+                <input type="text" id="prodCode" placeholder="e.g. LP-TEE-001">
+            </div>
+        </div>
+
+        <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="form-group">
+                <label>Price (R)</label>
+                <input type="number" id="prodPrice" placeholder="e.g. 250">
+            </div>
+            <div class="form-group">
+                <label>Visibility</label>
+                <select id="prodVisibility">
+                    <option value="public">Public</option>
+                    <option value="exclusive">Exclusive</option>
+                    <option value="private">Private / Hidden</option>
+                    <option value="coming_soon">Coming Soon</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Product Type</label>
+            <select id="prodTypeSelect" onchange="toggleCustomType()">
+                <!-- Dynamically filled types will appear here -->
+                <option value="other">Other...</option>
+            </select>
+            <input type="text" id="prodTypeCustom" class="custom-type-input" placeholder="Enter custom type">
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <textarea id="prodDesc" placeholder="Describe the product details, material, fit, etc."></textarea>
+        </div>
+
+        <button class="admin-btn" id="saveProductBtn" style="width: 100%;" onclick="saveProduct()">Save Product</button>
+        <button class="admin-btn" style="background: var(--surface-variant); color: var(--on-surface-variant); margin-top: 10px; width: 100%;" onclick="closeModal()">Cancel</button>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2024 Last Passion Clothing. Admin Portal.</p>
+</footer>
+
+<!-- Firebase Utilities -->
+<script type="module">
+  import { auth, db, storage, COLLECTIONS, STORAGE_PATHS, AuthService } from './core/FirebaseService.js';
+  import { collection, collectionGroup, addDoc, getDocs, deleteDoc, updateDoc, doc, query, orderBy, getDoc, setDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+  let allProducts = [];
+  let currentAssetType = ''; // 'logo' or 'banner'
+  let knownProductTypes = []; // Initialized as empty, forcing "Other" if nothing in Firebase
+
+  // Security Check
+  onAuthStateChanged(auth, async (user) => {
+      if (user) {
+          try {
+              const userDoc = await getDoc(doc(db, COLLECTIONS.USERS, user.uid));
+              if (userDoc.exists()) {
+                  const data = userDoc.data();
+                  const isAdmin = data.roles?.lastpassion?.isAdmin === true;
+                  if (!isAdmin) {
+                      alert("Access denied. Admin only.");
+                      window.location.href = "index.html";
+                  } else {
+                      await loadSiteConfig();
+                      fetchProducts();
+                      document.getElementById('global-loader').classList.add('hidden');
+                  }
+              } else {
+                  window.location.href = "index.html";
+              }
+          } catch (e) {
+              console.error(e);
+              window.location.href = "index.html";
+          }
+      } else {
+          window.location.href = "authentication/login.html?returnUrl=../admin.html";
+      }
+  });
+
+  async function loadSiteConfig() {
+      try {
+          const configDoc = await getDoc(doc(db, COLLECTIONS.PRODUCTS, 'main'));
+          if (configDoc.exists()) {
+              const data = configDoc.data();
+              if (data.logoUrl) document.getElementById('currentLogo').src = data.logoUrl;
+              if (data.bannerUrl) document.getElementById('currentBanner').src = data.bannerUrl;
+              
+              // Load product types from firebase
+              if (data.productTypes && Array.isArray(data.productTypes)) {
+                  knownProductTypes = data.productTypes;
+              }
+          }
+          populateTypeDropdowns();
+      } catch (e) {
+          console.error("Error loading site config:", e);
+          populateTypeDropdowns(); 
+      }
+  }
+
+  function populateTypeDropdowns() {
+      const modalSelect = document.getElementById('prodTypeSelect');
+      const filterSelect = document.getElementById('inventoryTypeFilter');
+      
+      // Clear existing options except 'other' and 'all'
+      modalSelect.innerHTML = '<option value="other">Other...</option>';
+      filterSelect.innerHTML = '<option value="all">All Types</option>';
+
+      knownProductTypes.sort().forEach(type => {
+          const label = type.charAt(0).toUpperCase() + type.slice(1);
+          
+          // Add to Modal
+          const modalOpt = document.createElement('option');
+          modalOpt.value = type;
+          modalOpt.textContent = label;
+          modalSelect.insertBefore(modalOpt, modalSelect.firstChild);
+
+          // Add to Filter
+          const filterOpt = document.createElement('option');
+          filterOpt.value = type;
+          filterOpt.textContent = label;
+          filterSelect.appendChild(filterOpt);
+      });
+  }
+
+  window.showAssetModal = (type) => {
+      currentAssetType = type;
+      document.getElementById('assetModalTitle').innerText = type === 'logo' ? 'Update Store Logo' : 'Update Welcome Image';
+      document.getElementById('assetModal').style.display = 'flex';
+  };
+
+  window.closeAssetModal = () => {
+      document.getElementById('assetModal').style.display = 'none';
+      document.getElementById('assetInput').value = '';
+  };
+
+  window.saveAsset = async () => {
+      const fileInput = document.getElementById('assetInput');
+      const btn = document.getElementById('saveAssetBtn');
+      
+      if (!fileInput.files[0]) return alert("Please select an image first.");
+      
+      btn.disabled = true;
+      btn.innerText = "Uploading...";
+
+      try {
+          const file = fileInput.files[0];
+          const path = `${STORAGE_PATHS.PRODUCTS}/main/${currentAssetType}_${Date.now()}`;
+          const storageRef = ref(storage, path);
+          const snapshot = await uploadBytes(storageRef, file);
+          const url = await getDownloadURL(snapshot.ref);
+
+          const configRef = doc(db, COLLECTIONS.PRODUCTS, 'main');
+          const updateData = {};
+          if (currentAssetType === 'logo') updateData.logoUrl = url;
+          else updateData.bannerUrl = url;
+          updateData.updatedAt = new Date();
+          updateData.updatedBy = auth.currentUser.uid;
+
+          await setDoc(configRef, updateData, { merge: true });
+          
+          alert(`${currentAssetType.charAt(0).toUpperCase() + currentAssetType.slice(1)} updated successfully!`);
+          location.reload();
+      } catch (e) {
+          console.error(e);
+          alert("Error updating asset: " + e.message);
+          btn.disabled = false;
+          btn.innerText = "Upload & Update";
+      }
+  };
+
+  window.showAddProductModal = () => {
+      document.getElementById('modalTitle').innerText = "Add New Product";
+      document.getElementById('editProductId').value = "";
+      document.getElementById('prodName').value = "";
+      document.getElementById('prodCode').value = "";
+      document.getElementById('prodPrice').value = "";
+      document.getElementById('prodDesc').value = "";
+      
+      // Default to the first known type if available, otherwise "other"
+      if (knownProductTypes.length > 0) {
+          document.getElementById('prodTypeSelect').value = knownProductTypes[0];
+          document.getElementById('prodTypeCustom').style.display = "none";
+      } else {
+          document.getElementById('prodTypeSelect').value = "other";
+          document.getElementById('prodTypeCustom').style.display = "block";
+      }
+      
+      document.getElementById('prodTypeCustom').value = "";
+      document.getElementById('prodVisibility').value = "public";
+      
+      for(let i=1; i<=3; i++) {
+          document.getElementById(`imgInput${i}`).value = "";
+          document.getElementById(`prev${i}`).src = "";
+          document.getElementById(`prev${i}`).style.display = "none";
+          document.getElementById(`slot${i}`).querySelector('i').style.display = "block";
+          document.getElementById(`slot${i}`).querySelector('span').style.display = "block";
+      }
+      
+      document.getElementById('addProductModal').style.display = 'flex';
+  };
+
+  window.closeModal = () => {
+      document.getElementById('addProductModal').style.display = 'none';
+  };
+
+  window.previewImage = (index) => {
+      const input = document.getElementById(`imgInput${index}`);
+      const prev = document.getElementById(`prev${index}`);
+      const slot = document.getElementById(`slot${index}`);
+      
+      if (input.files && input.files[0]) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+              prev.src = e.target.result;
+              prev.style.display = "block";
+              slot.querySelector('i').style.display = "none";
+              slot.querySelector('span').style.display = "none";
+          };
+          reader.readAsDataURL(input.files[0]);
+      }
+  };
+
+  window.toggleCustomType = () => {
+      const select = document.getElementById('prodTypeSelect');
+      const custom = document.getElementById('prodTypeCustom');
+      custom.style.display = select.value === 'other' ? 'block' : 'none';
+  };
+
+  window.saveProduct = async () => {
+      const btn = document.getElementById('saveProductBtn');
+      const editId = document.getElementById('editProductId').value;
+      const name = document.getElementById('prodName').value;
+      const code = document.getElementById('prodCode').value;
+      const price = document.getElementById('prodPrice').value;
+      const visibility = document.getElementById('prodVisibility').value;
+      const desc = document.getElementById('prodDesc').value;
+      const select = document.getElementById('prodTypeSelect');
+      const custom = document.getElementById('prodTypeCustom');
+      
+      const isCustomType = select.value === 'other';
+      const type = isCustomType ? custom.value.toLowerCase().trim() : select.value;
+
+      if(!name || !code || !price || !type) {
+          return alert("Please fill all required fields.");
+      }
+
+      const hasNewImage1 = document.getElementById('imgInput1').files[0];
+      const hasExistingImage1 = editId && allProducts.find(p => p.id === editId)?.images?.[0];
+      
+      if(!hasNewImage1 && !hasExistingImage1) {
+          return alert("At least the main product image is required.");
+      }
+
+      btn.disabled = true;
+      btn.innerText = "Processing...";
+
+      try {
+          // If it's a new custom type, save it to the main config list
+          if (isCustomType && !knownProductTypes.includes(type)) {
+              const configRef = doc(db, COLLECTIONS.PRODUCTS, 'main');
+              await setDoc(configRef, {
+                  productTypes: arrayUnion(type)
+              }, { merge: true });
+          }
+
+          let imageUrls = [];
+          if (editId) {
+              const existingProd = allProducts.find(p => p.id === editId);
+              imageUrls = [...(existingProd.images || [])];
+          }
+
+          for(let i=1; i<=3; i++) {
+              const file = document.getElementById(`imgInput${i}`).files[0];
+              if (file) {
+                  const fileName = `${code}_${i}_${Date.now()}`;
+                  const storageRef = ref(storage, `${STORAGE_PATHS.PRODUCTS}/${type}/${fileName}`);
+                  const snapshot = await uploadBytes(storageRef, file);
+                  const url = await getDownloadURL(snapshot.ref);
+                  
+                  if (editId) imageUrls[i-1] = url;
+                  else imageUrls.push(url);
+              }
+          }
+
+          const productData = {
+              name,
+              productCode: code,
+              price: parseFloat(price),
+              type,
+              desc,
+              visibility,
+              images: imageUrls.filter(url => url),
+              img: imageUrls[0],
+              updatedAt: new Date()
+          };
+
+          if (editId) {
+              const oldType = document.getElementById('editProductType').value;
+              if (oldType !== type) {
+                  await deleteDoc(doc(db, COLLECTIONS.PRODUCTS, oldType, "items", editId));
+                  await addDoc(collection(db, COLLECTIONS.PRODUCTS, type, "items"), {
+                      ...productData,
+                      addedBy: auth.currentUser.uid,
+                      createdAt: new Date()
+                  });
+              } else {
+                  await updateDoc(doc(db, COLLECTIONS.PRODUCTS, type, "items", editId), productData);
+              }
+          } else {
+              await addDoc(collection(db, COLLECTIONS.PRODUCTS, type, "items"), {
+                  ...productData,
+                  addedBy: auth.currentUser.uid,
+                  createdAt: new Date()
+              });
+          }
+
+          alert(editId ? "Product updated!" : "Product added!");
+          location.reload();
+      } catch (e) {
+          console.error(e);
+          alert("Error: " + e.message);
+          btn.disabled = false;
+          btn.innerText = "Save Product";
+      }
+  };
+
+  window.fetchProducts = async () => {
+      const q = query(collectionGroup(db, "items"), orderBy("createdAt", "desc"));
+      const querySnapshot = await getDocs(q);
+      allProducts = [];
+      querySnapshot.forEach((docSnap) => {
+          const product = docSnap.data();
+          product.id = docSnap.id;
+          allProducts.push(product);
+      });
+      handleFilters();
+  };
+
+  window.handleFilters = () => {
+      const searchTerm = document.getElementById('inventorySearch').value.toLowerCase();
+      const sortVal = document.getElementById('inventorySort').value;
+      const typeFilter = document.getElementById('inventoryTypeFilter').value;
+      const visibilityFilter = document.getElementById('inventoryVisibilityFilter').value;
+
+      let filtered = [...allProducts];
+
+      if (searchTerm) {
+          filtered = filtered.filter(p => {
+              const nameMatch = p.name && p.name.toLowerCase().includes(searchTerm);
+              const codeMatch = p.productCode && p.productCode.toLowerCase().includes(searchTerm);
+              return nameMatch || codeMatch;
+          });
+      }
+
+      if (typeFilter !== 'all') {
+          filtered = filtered.filter(p => p.type === typeFilter);
+      }
+
+      if (visibilityFilter !== 'all') {
+          filtered = filtered.filter(p => p.visibility === visibilityFilter);
+      }
+
+      filtered.sort((a, b) => {
+          if (sortVal === 'newest') return (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0);
+          if (sortVal === 'oldest') return (a.createdAt?.toMillis?.() || 0) - (b.createdAt?.toMillis?.() || 0);
+          if (sortVal === 'priceLow') return (a.price || 0) - (b.price || 0);
+          if (sortVal === 'priceHigh') return (b.price || 0) - (a.price || 0);
+          if (sortVal === 'name') return (a.name || "").localeCompare(b.name || "");
+          return 0;
+      });
+
+      renderProducts(filtered);
+  };
+
+  window.renderProducts = (products) => {
+      const list = document.getElementById('adminProductList');
+      const count = document.getElementById('totalProductsCount');
+      list.innerHTML = "";
+      count.innerText = products.length;
+
+      products.forEach((product) => {
+          const visibilityClass = `v-${product.visibility?.replace('_', '-') || 'public'}`;
+          const row = `
+              <tr>
+                  <td><img src="${product.img || (product.images && product.images[0])}" alt="${product.name || 'Product'}"></td>
+                  <td style="font-family: monospace; font-weight: bold;">${product.productCode || 'N/A'}</td>
+                  <td>${product.name || 'Unnamed'}</td>
+                  <td>R ${product.price || 0}</td>
+                  <td>${product.type || 'N/A'}</td>
+                  <td><span class="visibility-tag ${visibilityClass}">${product.visibility || 'public'}</span></td>
+                  <td class="action-btns">
+                      <button class="btn-edit" onclick="editProduct('${product.id}')"><i class="fa-solid fa-pen"></i></button>
+                      <button class="btn-delete" onclick="deleteProduct('${product.type}', '${product.id}')"><i class="fa-solid fa-trash"></i></button>
+                  </td>
+              </tr>
+          `;
+          list.innerHTML += row;
+      });
+  };
+
+  window.editProduct = (id) => {
+      const product = allProducts.find(p => p.id === id);
+      if (!product) return;
+
+      document.getElementById('modalTitle').innerText = "Edit Product";
+      document.getElementById('editProductId').value = id;
+      document.getElementById('editProductType').value = product.type;
+      document.getElementById('prodName').value = product.name || "";
+      document.getElementById('prodCode').value = product.productCode || "";
+      document.getElementById('prodPrice').value = product.price || "";
+      document.getElementById('prodDesc').value = product.desc || "";
+      document.getElementById('prodVisibility').value = product.visibility || "public";
+      
+      if (knownProductTypes.includes(product.type)) {
+          document.getElementById('prodTypeSelect').value = product.type;
+          document.getElementById('prodTypeCustom').style.display = "none";
+      } else {
+          document.getElementById('prodTypeSelect').value = "other";
+          document.getElementById('prodTypeCustom').value = product.type;
+          document.getElementById('prodTypeCustom').style.display = "block";
+      }
+
+      const imgs = product.images || [product.img];
+      for(let i=1; i<=3; i++) {
+          const prev = document.getElementById(`prev${i}`);
+          const slot = document.getElementById(`slot${i}`);
+          if (imgs[i-1]) {
+              prev.src = imgs[i-1];
+              prev.style.display = "block";
+              slot.querySelector('i').style.display = "none";
+              slot.querySelector('span').style.display = "none";
+          } else {
+              prev.src = "";
+              prev.style.display = "none";
+              slot.querySelector('i').style.display = "block";
+              slot.querySelector('span').style.display = "block";
+          }
+      }
+
+      document.getElementById('addProductModal').style.display = 'flex';
+  };
+
+  window.deleteProduct = async (type, id) => {
+      if(confirm("Are you sure you want to delete this product?")) {
+          try {
+              await deleteDoc(doc(db, COLLECTIONS.PRODUCTS, type, "items", id));
+              location.reload();
+          } catch (e) {
+              alert("Error deleting product: " + e.message);
+          }
+      }
+  };
+
+  document.getElementById('logoutLink').addEventListener('click', (e) => {
+      e.preventDefault();
+      AuthService.logout().then(() => {
+          window.location.href = "index.html";
+      });
+  });
+
+</script>
+
+</body>
+</html>

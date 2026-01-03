@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Last Passion</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../favicon/favicon.svg" />
+    <link rel="shortcut icon" href="../favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+    <link rel="manifest" href="../favicon/site.webmanifest" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .auth-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background: var(--surface);
+            border: 1px solid var(--outline);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .auth-container h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--on-surface);
+        }
+        .auth-btn {
+            width: 100%;
+            background: var(--primary);
+            color: var(--on-primary);
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            text-transform: uppercase;
+            transition: opacity 0.3s;
+        }
+        .auth-btn:disabled {
+            background: var(--surface-variant);
+            color: var(--on-surface-variant);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .auth-footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--on-surface-variant);
+        }
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .error-msg {
+            color: var(--error);
+            font-size: 13px;
+            margin-bottom: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Global Loader -->
+<div id="global-loader">
+    <div class="spinner"></div>
+</div>
+
+<nav>
+    <div class="logo-nav">
+        <a href="../index.html"><img src="../img/lastpassion.jpg" alt="Last Passion"></a>
+    </div>
+</nav>
+
+<div class="auth-container">
+    <h1>Register</h1>
+    <div id="errorMessage" class="error-msg"></div>
+
+    <div class="form-group" style="text-align: left;">
+        <label>Full Name</label>
+        <input type="text" id="name" placeholder="Enter your full name">
+    </div>
+    <div class="form-group" style="text-align: left;">
+        <label>Username</label>
+        <input type="text" id="username" placeholder="Choose a unique username">
+    </div>
+    <div class="form-group" style="text-align: left;">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="Enter your email">
+    </div>
+    <div class="form-group" style="text-align: left;">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Create a password (min 6 chars)">
+    </div>
+    
+    <button class="auth-btn" id="registerBtn" disabled>Register</button>
+    
+    <div class="auth-footer">
+        Already have an account? <a id="loginLink" href="login.html">Login</a>
+    </div>
+</div>
+
+<script type="module">
+    import { AuthViewModel } from './AuthViewModel.js';
+
+    // Get return URL from query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const returnUrl = urlParams.get('returnUrl') || "../admin.html";
+
+    // Pass returnUrl to Login link as well
+    document.getElementById('loginLink').href = `login.html?returnUrl=${encodeURIComponent(returnUrl)}`;
+
+    // ViewModel now uses core FirebaseService internally
+    const viewModel = new AuthViewModel(true);
+
+    const nameInput = document.getElementById('name');
+    const usernameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const registerBtn = document.getElementById('registerBtn');
+    const errorMessage = document.getElementById('errorMessage');
+
+    viewModel.subscribe((state) => {
+        registerBtn.disabled = !state.isValid || state.loading;
+        registerBtn.innerText = state.loading ? 'Creating Account...' : 'Register';
+        
+        // Update username field value if it was normalized by ViewModel (e.g. forced lowercase)
+        if (document.activeElement !== usernameInput) {
+            usernameInput.value = state.username;
+        }
+
+        if (state.error) {
+            errorMessage.innerText = state.error;
+            errorMessage.style.display = 'block';
+        } else {
+            errorMessage.style.display = 'none';
+        }
+        
+        // Hide loader after initial state check
+        document.getElementById('global-loader').classList.add('hidden');
+    });
+
+    nameInput.addEventListener('input', (e) => viewModel.updateField('name', e.target.value));
+    usernameInput.addEventListener('input', (e) => viewModel.updateField('username', e.target.value));
+    emailInput.addEventListener('input', (e) => viewModel.updateField('email', e.target.value));
+    passwordInput.addEventListener('input', (e) => viewModel.updateField('password', e.target.value));
+
+    registerBtn.addEventListener('click', async () => {
+        const result = await viewModel.register();
+        if (result.success) {
+            window.location.href = returnUrl;
+        }
+    });
+</script>
+
+</body>
+</html>

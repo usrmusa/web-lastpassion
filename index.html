@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Last Passion – Coming Soon</title>
+    <title>Last Passion – Official Store</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
@@ -25,387 +25,162 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
-
-    <style>
-        :root {
-            --primary-pink: #ff0099;
-            --dark-bg: #1a1a1a;
-            --text-light: #f4f4f4;
-            --overlay: rgba(255, 255, 255, 0.9);
-            --text-dark: #1a1a1a;
-            --text-muted: #666666;
-            --digilayn-dark: #444; /* Darker color for less visibility */
-            --warning-yellow: #ffcc00;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: #fff;
-            color: var(--text-dark);
-            line-height: 1.6;
-        }
-
-        /* Under Development Banner */
-        .dev-banner {
-            background: var(--warning-yellow);
-            color: #000;
-            text-align: center;
-            padding: 10px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: sticky;
-            top: 0;
-            z-index: 1100;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-        }
-
-        /* Navigation */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 5%;
-            background: #fff;
-            border-bottom: 1px solid #eee;
-            position: sticky;
-            top: 38px; /* Height of the banner */
-            z-index: 1000;
-        }
-
-        .logo-nav img {
-            height: 50px;
-        }
-
-        .nav-links a {
-            margin-left: 25px;
-            text-decoration: none;
-            color: #000;
-            font-weight: 600;
-            font-size: 14px;
-            text-transform: uppercase;
-        }
-
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 40px 0;
-            background: #f9f9f9;
-            overflow: hidden;
-        }
-
-        .hero img {
-            width: 80%;
-            max-width: 800px;
-            height: auto;
-            margin: 0 auto;
-            display: block;
-            border-radius: 8px;
-        }
-
-        .hero p {
-            padding: 40px 20px;
-            font-size: 1.2rem;
-            font-weight: 500;
-        }
-
-        /* Product Grid */
-        .products-container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-        }
-
-        .product-card {
-            border: 1px solid #eee;
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.3s;
-            text-align: center;
-            padding-bottom: 20px;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        }
-
-        .product-img {
-            width: 100%;
-            height: 350px;
-            background: #eee;
-            object-fit: cover;
-        }
-
-        .product-info h3 {
-            margin: 15px 0 5px;
-            font-size: 18px;
-        }
-
-        .price {
-            color: var(--primary-pink);
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .btn-order {
-            background: #000;
-            color: #fff;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            display: inline-block;
-            cursor: pointer;
-        }
-
-        .btn-order:hover {
-            background: var(--primary-pink);
-        }
-
-        /* Modal Styles */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: #fff;
-            padding: 40px;
-            border-radius: 15px;
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
-
-        .modal-content h2 {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #000;
-        }
-
-        .modal-content p {
-            margin-bottom: 25px;
-            color: #444;
-            font-size: 1.1rem;
-        }
-
-        .modal-btns {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-
-        .btn-modal {
-            padding: 12px 25px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .btn-wa {
-            background: #25D366;
-            color: #fff;
-            border: none;
-        }
-
-        .btn-wa:hover {
-            background: #128C7E;
-        }
-
-        .btn-close {
-            background: #eee;
-            color: #000;
-            border: none;
-        }
-
-        .btn-close:hover {
-            background: #ddd;
-        }
-
-        footer {
-            background: #000;
-            color: #fff;
-            padding: 40px 20px;
-            text-align: center;
-            margin-top: 60px;
-        }
-
-        .digilayn-link {
-            color: var(--digilayn-dark);
-            text-transform: uppercase;
-            font-weight: 700;
-            text-decoration: none;
-            letter-spacing: 1px;
-            font-size: 10px;
-            transition: color 0.3s;
-        }
-
-        .digilayn-link:hover {
-            color: #666;
-        }
-
-        @media (max-width: 600px) {
-            nav {
-                flex-direction: column;
-                padding: 15px 5%;
-                top: 54px; /* Adjust for banner height on small screens */
-            }
-            .nav-links {
-                margin-top: 15px;
-                display: flex;
-                justify-content: space-around;
-                width: 100%;
-            }
-            .nav-links a {
-                margin-left: 0;
-                font-size: 12px;
-            }
-            .hero img {
-                width: 100%;
-                border-radius: 0;
-            }
-            .hero {
-                padding: 0;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<div class="dev-banner">
-    🚧 Under Development: We're still building, but feel free to browse our progress! 🚧
+<!-- Global Loader -->
+<div id="global-loader">
+    <div class="spinner"></div>
 </div>
 
 <nav>
     <div class="logo-nav">
-        <img src="img/lastpassion.jpg" alt="Last Passion">
+        <img id="site-logo" src="img/lastpassion.jpg" alt="Last Passion">
     </div>
-    <div class="nav-links">
-        <a href="#" class="shop-trigger">Shop</a>
-        <a href="https://web.facebook.com/MpahlaKoKasi/photos_by">Collections</a>
-        <a href="https://wa.me/27699671746">WhatsApp</a>
+
+    <!-- Mobile Menu Toggle -->
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars"></i>
+    </div>
+
+    <div class="nav-links" id="navLinks">
+        <a href="store/collections.html">Collections</a>
+        <a href="company/support.html">Support</a>
+        <div id="authLinks" style="display: flex; align-items: center;">
+            <!-- Login link will be injected here by Firebase logic -->
+        </div>
+    </div>
+
+    <div class="cart-icon" onclick="toggleCart()">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span class="cart-count">0</span>
     </div>
 </nav>
 
-<section class="hero">
-    <img src="img/lastpassion.jpg" alt="Last Passion Banner">
-    <p>Premium Streetwear for the Passionate.</p>
-</section>
+<div class="hero">
+    <img id="site-banner" src="img/lastpassion.jpg" alt="Banner">
+</div>
 
-<div class="products-container">
-    <!-- Product 1 -->
-    <div class="product-card">
-        <img src="img/SignatureTee.jpg" alt="Signature Tee" class="product-img">
-        <div class="product-info">
-            <h3>Signature Tee</h3>
-            <p class="price">R -.00</p>
-            <a href="#" class="btn-order order-trigger" data-product="Signature Tee">Order</a>
-        </div>
-    </div>
-
-    <!-- Product 2 -->
-    <div class="product-card">
-        <img src="img/hoodie.jpg" alt="Last Passion Hoodie" class="product-img">
-        <div class="product-info">
-            <h3>Last Passion Hoodie</h3>
-            <p class="price">R -.00</p>
-            <a href="#" class="btn-order order-trigger" data-product="Last Passion Hoodie">Order</a>
-        </div>
+<!-- Exclusive News Banner -->
+<div class="news-banner">
+    <div class="news-content">
+        <span class="news-tag">EXCLUSIVE</span>
+        <p><strong>Last Passion Winter Drop:</strong> Signature Hoodies now available. Limited stock only! <a href="store/collections.html?filter=winter" style="color: var(--primary); font-weight: 700;">Explore Now</a></p>
     </div>
 </div>
 
-<!-- Sabali Modal -->
-<div class="modal-overlay" id="sabaliModal">
-    <div class="modal-content">
-        <h2>Sabali (Patience)</h2>
-        <p>Our website is still under development, but we're ready to assist you via WhatsApp!</p>
-        <div class="modal-btns">
-            <a href="https://wa.me/27699671746" class="btn-modal btn-wa" id="waLink">WhatsApp Us</a>
-            <button class="btn-modal btn-close" id="closeModal">Close</button>
+<div class="products-container" id="product-grid">
+    <!-- Products injected by script.js -->
+</div>
+
+<!-- Cart Sidebar -->
+<div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+        <h3>YOUR BAG</h3>
+        <i class="fa-solid fa-xmark" style="cursor: pointer" onclick="toggleCart()"></i>
+    </div>
+    <div class="cart-items" id="cartItems">
+        <!-- Items go here -->
+    </div>
+    <div class="cart-footer">
+        <div class="total-row">
+            <span>Total</span>
+            <span id="cartTotal">R 0.00</span>
         </div>
+        <button class="btn-checkout" onclick="openCheckout()">Checkout</button>
+    </div>
+</div>
+
+<!-- Checkout Modal -->
+<div class="modal" id="checkoutModal">
+    <div class="modal-content">
+        <h2 style="font-family: 'Bebas Neue'">Checkout</h2>
+        <p style="margin-bottom: 20px; color: var(--on-surface-variant);">Complete your order details below.</p>
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="custName" placeholder="Your name will appear here" readonly>
+        </div>
+        <div class="form-group">
+            <label>Payment Method</label>
+            <div style="background: var(--surface-variant); padding: 15px; border-radius: 8px; font-size: 14px; color: var(--on-surface-variant); border: 1px dashed var(--outline);">
+                <p>💬 <strong>WhatsApp Manual Payment Link</strong></p>
+                <p style="margin-top: 10px; font-size: 12px; opacity: 0.8;">💳 Instant EFT & Card payments are coming soon!</p>
+            </div>
+        </div>
+        <button class="btn-checkout" style="background: var(--success-green); color: white;" onclick="processOrder()">
+            Place Order via WhatsApp
+        </button>
+        <button class="btn-checkout" style="background: var(--surface-variant); color: var(--on-surface-variant); margin-top: 10px;" onclick="closeCheckout()">Cancel</button>
     </div>
 </div>
 
 <footer>
-    <div class="brand-name" style="color: #fff;">Last Passion</div>
-    <p style="color: #888; margin-top: 10px;">&copy; 2024 Last Passion Clothing. All Rights Reserved.</p>
-    <div class="fine-print" style="margin-top: 20px;">
-        <a href="https://digilayn.co.za" class="digilayn-link">DIGILAYN STUDIO</a>
-    </div>
+    <p>&copy; 2024 Last Passion Clothing. All Rights Reserved.</p>
+    <a href="https://digilayn.co.za" style="color: var(--brand-green); font-size: 10px; text-decoration: none; margin-top: 20px; display: block; font-weight: bold;">DIGILAYN STUDIO</a>
 </footer>
 
-<script>
-    console.log("%cDeveloped by Musa Mgijima", "color: #ff0099; font-size: 20px; font-weight: bold;");
-    console.log("%cReach me at Digilayn Studio: https://digilayn.co.za", "color: #888; font-size: 14px;");
-    console.log("%cNOTICE: Unauthorized use or copying of this source code is strictly prohibited.", "color: red; font-weight: bold;");
+<!-- Firebase SSOT -->
+<script type="module">
+  import { auth, db, COLLECTIONS } from './core/FirebaseService.js';
+  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    // Sabali Modal Logic
-    const modal = document.getElementById('sabaliModal');
-    const closeBtn = document.getElementById('closeModal');
-    const shopTrigger = document.querySelector('.shop-trigger');
-    const orderTriggers = document.querySelectorAll('.order-trigger');
-    const waLink = document.getElementById('waLink');
+  // Initial UI Setup: Fetch Logo and Banner from SSOT
+  async function loadSiteBranding() {
+    try {
+      const brandingDoc = await getDoc(doc(db, COLLECTIONS.PRODUCTS, 'main'));
+      if (brandingDoc.exists()) {
+        const data = brandingDoc.data();
+        if (data.logoUrl) document.getElementById('site-logo').src = data.logoUrl;
+        if (data.bannerUrl) document.getElementById('site-banner').src = data.bannerUrl;
+      }
+    } catch (e) {
+      console.error("Error loading branding:", e);
+    }
+  }
+  loadSiteBranding();
 
-    const showModal = (productName = '') => {
-        if (productName) {
-            waLink.href = `https://wa.me/27699671746?text=I'm interested in the ${productName}`;
-        } else {
-            waLink.href = 'https://wa.me/27699671746';
+  // Auth State Listener
+  const authLinks = document.getElementById('authLinks');
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      // 1. Initial name from Auth profile - Show immediately
+      let name = user.displayName || user.email.split('@')[0];
+      authLinks.innerHTML = `<a href="authentication/profile.html" class="nav-user-link">Hi, ${name}</a>`;
+
+      // Hide loader as soon as basic auth is determined
+      document.getElementById('global-loader').classList.add('hidden');
+
+      // 2. Background fetch for the most up-to-date Full Name
+      try {
+        const userDoc = await getDoc(doc(db, COLLECTIONS.USERS, user.uid));
+        if (userDoc.exists()) {
+          const data = userDoc.data();
+          if (data.displayName) {
+             authLinks.innerHTML = `<a href="authentication/profile.html" class="nav-user-link">Hi, ${data.displayName}</a>`;
+          }
         }
-        modal.style.display = 'flex';
-    };
+      } catch (e) {
+        console.error("Error updating display name:", e);
+      }
+    } else {
+      const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+      authLinks.innerHTML = `<a href="authentication/login.html?returnUrl=../${currentPath}">Login</a>`;
+      // Hide loader for guest
+      document.getElementById('global-loader').classList.add('hidden');
+    }
+  });
 
-    const hideModal = () => {
-        modal.style.display = 'none';
-    };
-
-    shopTrigger.addEventListener('click', (e) => {
-        e.preventDefault();
-        showModal();
-    });
-
-    orderTriggers.forEach(trigger => {
-        trigger.addEventListener('click', (e) => {
-            e.preventDefault();
-            const product = trigger.getAttribute('data-product');
-            showModal(product);
-        });
-    });
-
-    closeBtn.addEventListener('click', hideModal);
-
-    // Close on overlay click
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) hideModal();
-    });
+  // Make Firebase accessible to script.js
+  window.auth = auth;
+  window.db = db;
 </script>
+
+<!-- External JS -->
+<script src="script.js"></script>
 </body>
 </html>

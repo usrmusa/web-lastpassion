@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Last Passion</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../favicon/favicon.svg" />
+    <link rel="shortcut icon" href="../favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+    <link rel="manifest" href="../favicon/site.webmanifest" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Cropper.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .profile-container {
+            max-width: 600px;
+            margin: 60px auto;
+            padding: 30px;
+            background: var(--surface);
+            border: 1px solid var(--outline);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .profile-header h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            color: var(--on-surface);
+            margin-bottom: 5px;
+        }
+        .profile-img-wrapper {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 15px;
+        }
+        .profile-img-container {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            background: var(--primary);
+            color: var(--on-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 4px solid var(--primary-container);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .profile-img-container:hover {
+            transform: scale(1.05);
+        }
+        .profile-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        .profile-img-container span {
+            font-size: 3.5rem;
+            font-family: 'Bebas Neue';
+        }
+        .change-img-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: var(--primary);
+            color: var(--on-primary);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: 3px solid var(--surface);
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .change-img-btn:hover {
+            background: var(--secondary);
+        }
+        .info-group {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--outline);
+            position: relative;
+        }
+        .info-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--on-surface-variant);
+            font-weight: 700;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .info-value {
+            font-size: 16px;
+            color: var(--on-surface);
+            font-weight: 600;
+        }
+        .edit-icon {
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 5px;
+        }
+        .bio-text {
+            font-style: italic;
+            color: var(--on-surface-variant);
+            font-weight: 400;
+        }
+        .logout-btn {
+            width: 100%;
+            background: var(--surface-variant);
+            color: var(--on-surface-variant);
+            border: 1px solid var(--outline);
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        .logout-btn:hover {
+            background: var(--error);
+            color: white;
+            border-color: var(--error);
+        }
+
+        .admin-btn {
+            width: 100%;
+            background: var(--neutral-dark);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            text-transform: uppercase;
+            transition: 0.3s;
+            display: none; /* Hidden by default, shown if admin */
+        }
+        .admin-btn:hover {
+            background: #000;
+        }
+
+        /* Image Viewer Modal */
+        #imageViewer {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 5000;
+            justify-content: center;
+            align-items: center;
+        }
+        #imageViewer img {
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+        .close-viewer {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 40px;
+            cursor: pointer;
+        }
+
+        /* Edit Modal */
+        .edit-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--outline);
+            border-radius: 5px;
+            background: var(--background);
+            color: var(--on-background);
+            margin-bottom: 15px;
+        }
+
+        /* Cropper Modal Styles */
+        #cropperModal .modal-content {
+            max-width: 500px;
+        }
+        .cropper-container-box {
+            width: 100%;
+            height: 300px;
+            background: #eee;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        #cropperImage {
+            max-width: 100%;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Global Loader -->
+<div id="global-loader">
+    <div class="spinner"></div>
+</div>
+
+<nav>
+    <div class="logo-nav">
+        <a href="../index.html"><img src="../img/lastpassion.jpg" alt="Last Passion"></a>
+    </div>
+    <div class="nav-links">
+        <a href="../index.html">Back to Store</a>
+    </div>
+</nav>
+
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="profile-img-wrapper">
+            <div class="profile-img-container" id="imgContainer" onclick="viewImage()">
+                <span id="profileInitial">U</span>
+                <img id="profilePic" src="" alt="Profile Picture">
+            </div>
+            <label for="imageUpload" class="change-img-btn">
+                <i class="fa-solid fa-camera"></i>
+            </label>
+            <input type="file" id="imageUpload" accept="image/*" style="display:none">
+        </div>
+        <h1 id="headerDisplayName">Loading...</h1>
+        <p id="headerUsername" style="color: var(--primary); font-weight: 700;">@username</p>
+    </div>
+
+    <div class="info-group">
+        <div class="info-label">Display Name</div>
+        <div class="info-row">
+            <div id="detailDisplayName" class="info-value">Loading...</div>
+            <i class="fa-solid fa-pen edit-icon" onclick="openEdit('displayName')"></i>
+        </div>
+    </div>
+
+    <div class="info-group">
+        <div class="info-label">Bio</div>
+        <div class="info-row">
+            <div id="detailBio" class="info-value bio-text">-</div>
+            <i class="fa-solid fa-pen edit-icon" onclick="openEdit('bio')"></i>
+        </div>
+    </div>
+
+    <div class="info-group">
+        <div class="info-label">Email Address</div>
+        <div class="info-row">
+            <div id="detailEmail" class="info-value">Loading...</div>
+        </div>
+    </div>
+
+    <div class="info-group">
+        <div class="info-label">Phone Number</div>
+        <div class="info-row">
+            <div id="detailPhone" class="info-value">Not provided</div>
+            <i class="fa-solid fa-pen edit-icon" onclick="openEdit('phone')"></i>
+        </div>
+    </div>
+
+    <div class="info-group">
+        <div class="info-label">Member Since</div>
+        <div id="detailJoined" class="info-value">Loading...</div>
+    </div>
+
+    <button class="admin-btn" id="adminBtn" onclick="window.location.href='../admin.html'">Admin Dashboard</button>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+</div>
+
+<!-- Image Viewer -->
+<div id="imageViewer">
+    <span class="close-viewer" onclick="closeViewer()">&times;</span>
+    <img id="fullImage" src="">
+</div>
+
+<!-- Edit Modal -->
+<div class="modal" id="editModal">
+    <div class="modal-content">
+        <h2 style="font-family: 'Bebas Neue'; margin-bottom: 15px;" id="editTitle">Edit</h2>
+        <input type="text" id="editFieldInput" class="edit-input">
+        <button class="btn-checkout" id="saveEditBtn">Save Changes</button>
+        <button class="btn-checkout" style="background: var(--surface-variant); color: var(--on-surface-variant); margin-top: 10px;" onclick="closeEdit()">Cancel</button>
+    </div>
+</div>
+
+<!-- Cropper Modal -->
+<div class="modal" id="cropperModal">
+    <div class="modal-content">
+        <h2 style="font-family: 'Bebas Neue'; margin-bottom: 15px;">Crop Profile Picture</h2>
+        <div class="cropper-container-box">
+            <img id="cropperImage" src="">
+        </div>
+        <button class="btn-checkout" id="cropSaveBtn">Crop & Save</button>
+        <button class="btn-checkout" style="background: var(--surface-variant); color: var(--on-surface-variant); margin-top: 10px;" onclick="closeCropper()">Cancel</button>
+    </div>
+</div>
+
+<!-- Cropper.js Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+<!-- Firebase Utilities -->
+<script type="module">
+    import { auth, db, storage, COLLECTIONS, AuthService } from '../core/FirebaseService.js';
+    import { onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+    let currentUser = null;
+    let editingField = '';
+    let cropper = null;
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            currentUser = user;
+            // Reveal UI immediately with basic auth info
+            showInitialData(user);
+            document.getElementById('global-loader').classList.add('hidden');
+            
+            // Fetch deeper info from Firestore in background
+            await loadUserData();
+        } else {
+            window.location.href = "login.html";
+        }
+    });
+
+    function showInitialData(user) {
+        const initialName = user.displayName || "User";
+        document.getElementById('headerDisplayName').innerText = initialName;
+        document.getElementById('detailDisplayName').innerText = initialName;
+        document.getElementById('detailEmail').innerText = user.email;
+        
+        const date = new Date(user.metadata.creationTime);
+        document.getElementById('detailJoined').innerText = date.toLocaleDateString('en-ZA', { 
+            year: 'numeric', month: 'long', day: 'numeric' 
+        });
+
+        const profilePic = document.getElementById('profilePic');
+        const profileInitial = document.getElementById('profileInitial');
+        
+        if (user.photoURL) {
+            profilePic.src = user.photoURL;
+            profilePic.style.display = 'block';
+            profileInitial.style.display = 'none';
+        } else {
+            profileInitial.innerText = initialName.charAt(0).toUpperCase();
+            profilePic.style.display = 'none';
+            profileInitial.style.display = 'flex';
+        }
+    }
+
+    async function loadUserData() {
+        if (!currentUser) return;
+        
+        try {
+            const userDoc = await getDoc(doc(db, COLLECTIONS.USERS, currentUser.uid));
+            if (userDoc.exists()) {
+                const data = userDoc.data();
+                
+                // Show Admin Button based on specific roles schema
+                const roles = data.roles || {};
+                const lastpassionRoles = roles.lastpassion || {};
+                if (lastpassionRoles.isAdmin === true) {
+                    document.getElementById('adminBtn').style.display = 'block';
+                }
+
+                if (data.displayName) {
+                    document.getElementById('headerDisplayName').innerText = data.displayName;
+                    document.getElementById('detailDisplayName').innerText = data.displayName;
+                }
+                if (data.username) document.getElementById('headerUsername').innerText = "@" + data.username;
+                else document.getElementById('headerUsername').style.display = 'none';
+
+                if (data.bio) document.getElementById('detailBio').innerText = data.bio;
+                if (data.phone) document.getElementById('detailPhone').innerText = data.phone;
+
+                if (data.photoUrl) {
+                    const profilePic = document.getElementById('profilePic');
+                    const profileInitial = document.getElementById('profileInitial');
+                    profilePic.src = data.photoUrl;
+                    profilePic.style.display = 'block';
+                    profileInitial.style.display = 'none';
+                }
+            }
+        } catch (e) {
+            console.error("Error fetching Firestore document:", e);
+        }
+    }
+
+    // Image Viewer
+    window.viewImage = () => {
+        const profilePic = document.getElementById('profilePic');
+        if (profilePic.style.display !== 'none') {
+            document.getElementById('fullImage').src = profilePic.src;
+            document.getElementById('imageViewer').style.display = 'flex';
+        }
+    };
+    window.closeViewer = () => {
+        document.getElementById('imageViewer').style.display = 'none';
+    };
+
+    // Edit Logic
+    window.openEdit = (field) => {
+        editingField = field;
+        const modal = document.getElementById('editModal');
+        const input = document.getElementById('editFieldInput');
+        const title = document.getElementById('editTitle');
+
+        if (field === 'displayName') {
+            title.innerText = "Edit Display Name";
+            input.value = document.getElementById('detailDisplayName').innerText;
+        } else if (field === 'phone') {
+            title.innerText = "Edit Phone Number";
+            input.value = document.getElementById('detailPhone').innerText === 'Not provided' ? '' : document.getElementById('detailPhone').innerText;
+        } else if (field === 'bio') {
+            title.innerText = "Edit Bio";
+            input.value = document.getElementById('detailBio').innerText === '-' ? '' : document.getElementById('detailBio').innerText;
+        }
+
+        modal.style.display = 'flex';
+    };
+
+    window.closeEdit = () => {
+        document.getElementById('editModal').style.display = 'none';
+    };
+
+    document.getElementById('saveEditBtn').addEventListener('click', async () => {
+        const newValue = document.getElementById('editFieldInput').value;
+        const userRef = doc(db, COLLECTIONS.USERS, currentUser.uid);
+
+        try {
+            document.getElementById('saveEditBtn').innerText = "Saving...";
+            if (editingField === 'displayName') {
+                await updateProfile(currentUser, { displayName: newValue });
+                await updateDoc(userRef, { displayName: newValue });
+            } else if (editingField === 'phone') {
+                await updateDoc(userRef, { phone: newValue });
+            } else if (editingField === 'bio') {
+                await updateDoc(userRef, { bio: newValue });
+            }
+            
+            closeEdit();
+            await loadUserData();
+        } catch (e) {
+            alert("Error updating profile: " + e.message);
+        } finally {
+            document.getElementById('saveEditBtn').innerText = "Save Changes";
+        }
+    });
+
+    // Image Upload & Cropper Logic
+    const imageUpload = document.getElementById('imageUpload');
+    const cropperModal = document.getElementById('cropperModal');
+    const cropperImage = document.getElementById('cropperImage');
+    const cropSaveBtn = document.getElementById('cropSaveBtn');
+
+    imageUpload.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            cropperImage.src = event.target.result;
+            cropperModal.style.display = 'flex';
+            
+            if (cropper) {
+                cropper.destroy();
+            }
+            
+            cropper = new Cropper(cropperImage, {
+                aspectRatio: 1,
+                viewMode: 1,
+                autoCropArea: 1,
+            });
+        };
+        reader.readAsDataURL(file);
+    });
+
+    window.closeCropper = () => {
+        cropperModal.style.display = 'none';
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+        imageUpload.value = '';
+    };
+
+    cropSaveBtn.addEventListener('click', async () => {
+        if (!cropper) return;
+
+        const canvas = cropper.getCroppedCanvas({
+            width: 500,
+            height: 500
+        });
+
+        canvas.toBlob(async (blob) => {
+            if (!blob) return;
+
+            const storageRef = ref(storage, `users/${currentUser.uid}/profile.jpg`);
+            
+            try {
+                cropSaveBtn.innerText = "Uploading...";
+                cropSaveBtn.disabled = true;
+
+                const snapshot = await uploadBytes(storageRef, blob);
+                const downloadURL = await getDownloadURL(snapshot.ref);
+                
+                await updateProfile(currentUser, { photoURL: downloadURL });
+                await updateDoc(doc(db, COLLECTIONS.USERS, currentUser.uid), { photoUrl: downloadURL });
+                
+                closeCropper();
+                await loadUserData();
+                alert("Profile picture updated!");
+            } catch (e) {
+                alert("Upload failed: " + e.message);
+            } finally {
+                cropSaveBtn.innerText = "Crop & Save";
+                cropSaveBtn.disabled = false;
+            }
+        }, 'image/jpeg', 0.9);
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        AuthService.logout().then(() => {
+            window.location.href = "../index.html";
+        });
+    });
+</script>
+
+</body>
+</html>

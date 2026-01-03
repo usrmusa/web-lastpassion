@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Last Passion</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../favicon/favicon.svg" />
+    <link rel="shortcut icon" href="../favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+    <link rel="manifest" href="../favicon/site.webmanifest" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .auth-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background: var(--surface);
+            border: 1px solid var(--outline);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .auth-container h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--on-surface);
+        }
+        .auth-btn {
+            width: 100%;
+            background: var(--primary);
+            color: var(--on-primary);
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            text-transform: uppercase;
+            transition: opacity 0.3s;
+        }
+        .auth-btn:disabled {
+            background: var(--surface-variant);
+            color: var(--on-surface-variant);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .auth-footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--on-surface-variant);
+        }
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .error-msg {
+            color: var(--error);
+            font-size: 13px;
+            margin-bottom: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Global Loader -->
+<div id="global-loader">
+    <div class="spinner"></div>
+</div>
+
+<nav>
+    <div class="logo-nav">
+        <a href="../index.html"><img src="../img/lastpassion.jpg" alt="Last Passion"></a>
+    </div>
+</nav>
+
+<div class="auth-container">
+    <h1>Login</h1>
+    <div id="errorMessage" class="error-msg"></div>
+    
+    <div class="form-group" style="text-align: left;">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="Enter your email">
+    </div>
+    <div class="form-group" style="text-align: left;">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter your password">
+    </div>
+    
+    <button class="auth-btn" id="loginBtn" disabled>Login</button>
+    
+    <div class="auth-footer">
+        Don't have an account? <a id="registerLink" href="register.html">Register</a>
+    </div>
+</div>
+
+<script type="module">
+    import { AuthViewModel } from './AuthViewModel.js';
+
+    // Get return URL from query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const returnUrl = urlParams.get('returnUrl') || "../admin.html";
+
+    // Pass returnUrl to Register link as well
+    document.getElementById('registerLink').href = `register.html?returnUrl=${encodeURIComponent(returnUrl)}`;
+
+    // ViewModel now uses core FirebaseService internally
+    const viewModel = new AuthViewModel(false);
+
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const loginBtn = document.getElementById('loginBtn');
+    const errorMessage = document.getElementById('errorMessage');
+
+    viewModel.subscribe((state) => {
+        loginBtn.disabled = !state.isValid || state.loading;
+        loginBtn.innerText = state.loading ? 'Signing in...' : 'Login';
+        
+        if (state.error) {
+            errorMessage.innerText = state.error;
+            errorMessage.style.display = 'block';
+        } else {
+            errorMessage.style.display = 'none';
+        }
+        
+        // Hide loader after initial state check
+        document.getElementById('global-loader').classList.add('hidden');
+    });
+
+    emailInput.addEventListener('input', (e) => viewModel.updateField('email', e.target.value));
+    passwordInput.addEventListener('input', (e) => viewModel.updateField('password', e.target.value));
+
+    loginBtn.addEventListener('click', async () => {
+        const result = await viewModel.login();
+        if (result.success) {
+            window.location.href = returnUrl;
+        }
+    });
+</script>
+
+</body>
+</html>
