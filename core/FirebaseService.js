@@ -9,13 +9,13 @@ import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-s
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC_QPmomjx6YmP55SiorvkODVHf7-z8mTA",
-  authDomain: "digilayn-core-app.firebaseapp.com",
-  projectId: "digilayn-core-app",
-  storageBucket: "digilayn-core-app.firebasestorage.app",
-  messagingSenderId: "362012916883",
-  appId: "1:362012916883:web:cade5dfb804dcf92912166",
-  measurementId: "G-GGNE86WGK9"
+  apiKey: "AIzaSyBeu9X992zDkl60XSMARkcdxu2nACzAO_w",
+  authDomain: "digilayn-projects.firebaseapp.com",
+  projectId: "digilayn-projects",
+  storageBucket: "digilayn-projects.firebasestorage.app",
+  messagingSenderId: "95485356681",
+  appId: "1:95485356681:web:3cfb7680a988a9dde17458",
+  measurementId: "G-TEEVQHB2YL"
 };
 
 // Initialize Firebase

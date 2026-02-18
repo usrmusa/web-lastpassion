@@ -1,7 +1,7 @@
 /* Last Passion - Ecommerce Logic */
 
 const products = [
-    { id: 1, name: 'Signature Tee', price: 349, img: 'img/SignatureTee.jpg' },
+    { id: 1, name: 'Signature Tee', price: 770, img: 'img/SignatureTee.jpg' },
     { id: 2, name: 'Last Passion Hoodie', price: 699, img: 'img/hoodie.jpg' }
 ];
 
@@ -154,7 +154,7 @@ function processOrder() {
 
 // Dev Log
 console.log("%cDeveloped by Musa Mgijima", "color: #ff0099; font-size: 20px; font-weight: bold;");
-console.log("%cReach me at Digilayn Studio: https://digilayn.co.za", "color: #888; font-size: 14px;");
+console.log("%cReach me at Digilayn Studio: https://digilayn.com", "color: #888; font-size: 14px;");
 console.log("%cNOTICE: Unauthorized use or copying of this source code is strictly prohibited.", "color: red; font-weight: bold;");
 
 document.addEventListener('DOMContentLoaded', initStore);
