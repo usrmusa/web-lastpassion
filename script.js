@@ -1,8 +1,8 @@
 /* Last Passion - Ecommerce Logic */
 
 const products = [
-    { id: 1, name: 'Signature Tee', price: 770, img: 'img/SignatureTee.jpg' },
-    { id: 2, name: 'Last Passion Hoodie', price: 699, img: 'img/hoodie.jpg' }
+    { id: 1, name: 'International Baseball Jacket', price: 770, img: 'img/SignatureTee.jpg' },
+    { id: 2, name: 'Hoodie', price: 699, img: 'img/hoodie.jpg' }
 ];
 
 let cart = JSON.parse(localStorage.getItem('lastpassion_cart')) || [];
@@ -22,12 +22,60 @@ function initStore() {
             <div class="product-info">
                 <h3>${p.name}</h3>
                 <p class="price">R ${p.price}.00</p>
-                <button class="btn-add" onclick="addToCart('${p.id}')">Add to Bag</button>
+                <button class="btn-add" onclick="showBetaDialog('${p.name}')">Add to Bag</button>
             </div>
         </div>
     `).join('');
 }
 
+function showBetaDialog(productName) {
+    // Create modal if it doesn't exist
+    if (!document.getElementById('betaModal')) {
+        const modalHtml = `
+            <div class="modal" id="betaModal" style="display:none;">
+                <div class="modal-content" style="text-align: center;">
+                    <h2 style="font-family: 'Bebas Neue'; margin-bottom: 15px;">Under Construction 🚧</h2>
+                    <p style="color: var(--on-surface-variant); margin-bottom: 20px;">
+                        Our online store is currently in <strong>BETA</strong>. <br>
+                        You can still order <strong>${productName}</strong> directly via WhatsApp!
+                    </p>
+                    <button class="btn-checkout" style="background: var(--success-green); color: white; width: 100%; margin-bottom: 10px;" onclick="orderViaWhatsApp('${productName}')">
+                        <i class="fa-brands fa-whatsapp"></i> Order on WhatsApp
+                    </button>
+                    <button class="btn-checkout" style="background: var(--surface-variant); color: var(--on-surface-variant); width: 100%;" onclick="closeBetaModal()">
+                        Close
+                    </button>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+    }
+    
+    // Update the product name in the onclick handler if needed, but for simplicity we just show the modal
+    // Ideally we would update the text dynamically, but re-creating it is fine for this simple use case
+    // or we can just update the onclick function to use a global variable.
+    // Let's just update the text content dynamically.
+    const modal = document.getElementById('betaModal');
+    const textP = modal.querySelector('p');
+    textP.innerHTML = `Our online store is currently in <strong>BETA</strong>. <br> You can still order <strong>${productName}</strong> directly via WhatsApp!`;
+    
+    const waBtn = modal.querySelector('button[onclick^="orderViaWhatsApp"]');
+    waBtn.setAttribute('onclick', `orderViaWhatsApp("${productName}")`);
+
+    modal.style.display = 'flex';
+}
+
+function closeBetaModal() {
+    const modal = document.getElementById('betaModal');
+    if (modal) modal.style.display = 'none';
+}
+
+function orderViaWhatsApp(productName) {
+    const message = `Hello Last Passion! I'm interested in ordering the "${productName}". Is it still available?`;
+    window.location.href = `https://wa.me/27699671746?text=${encodeURIComponent(message)}`;
+}
+
+// Deprecated for now
 function addToCart(id) {
     const source = (window.products && window.products.length > 0) ? window.products : products;
     const product = source.find(p => p.id == id);
@@ -152,9 +200,21 @@ function processOrder() {
     window.location.href = `https://wa.me/27699671746?text=${encodeURIComponent(message)}`;
 }
 
+// Make functions global so they can be called from HTML
+window.showBetaDialog = showBetaDialog;
+window.closeBetaModal = closeBetaModal;
+window.orderViaWhatsApp = orderViaWhatsApp;
+window.addToCart = addToCart;
+window.toggleCart = toggleCart;
+window.removeFromCart = removeFromCart;
+window.openCheckout = openCheckout;
+window.closeCheckout = closeCheckout;
+window.processOrder = processOrder;
+window.toggleMenu = toggleMenu;
+
 // Dev Log
 console.log("%cDeveloped by Musa Mgijima", "color: #ff0099; font-size: 20px; font-weight: bold;");
-console.log("%cReach me at Digilayn Studio: https://digilayn.com", "color: #888; font-size: 14px;");
+console.log("%cReach me at Digilayn Studio: https://digilayn.co.za", "color: #888; font-size: 14px;");
 console.log("%cNOTICE: Unauthorized use or copying of this source code is strictly prohibited.", "color: red; font-weight: bold;");
 
 document.addEventListener('DOMContentLoaded', initStore);
