@@ -1,5 +1,5 @@
 import { db, COLLECTIONS, PRODUCT_VISIBILITY } from './core/FirebaseService.js';
-import { collection, getDocs, query, where, orderBy, limit } from "firebase/firestore";
+import { collectionGroup, getDocs, query, where, orderBy, limit } from "firebase/firestore";
 
 // DOM Elements
 const productGrid = document.getElementById('product-grid');
@@ -26,11 +26,9 @@ async function loadProducts() {
     productGrid.innerHTML = '<div class="spinner"></div>';
 
     try {
-        // Query: Public products, ordered by priority (desc)
-        // Note: 'priority' field might not exist on all docs, so orderBy might filter them out if not careful.
-        // For now, let's just query by visibility.
+        // CORRECTED QUERY: Use collectionGroup to get all "items" from any subcollection.
         const q = query(
-            collection(db, COLLECTIONS.PRODUCTS),
+            collectionGroup(db, 'items'),
             where("visibility", "==", PRODUCT_VISIBILITY.PUBLIC),
             limit(20)
         );
@@ -46,8 +44,6 @@ async function loadProducts() {
         querySnapshot.forEach((doc) => {
             const product = doc.data();
             const pid = doc.id;
-            // Skip the 'main' config doc if it accidentally gets pulled (though visibility filter should catch it)
-            if (pid === 'main') return;
 
             const card = document.createElement('div');
             card.className = 'product-card';
