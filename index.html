@@ -11,11 +11,11 @@
     <title>Last Passion – Official Store</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
-    <link rel="shortcut icon" href="favicon/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
-    <link rel="manifest" href="favicon/site.webmanifest" />
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
 
     <!-- Developer Information -->
     <meta name="author" content="Musa Mgijima">
@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <!-- External CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css">
     <style>
         /* Development Progress Banner */
         .dev-progress-banner {
@@ -83,7 +83,7 @@
 
 <nav>
     <div class="logo-nav">
-        <img id="site-logo" src="img/lastpassion.jpg" alt="Last Passion">
+        <img id="site-logo" src="/img/lastpassion.jpg" alt="Last Passion">
     </div>
 
     <!-- Mobile Menu Toggle -->
@@ -92,8 +92,8 @@
     </div>
 
     <div class="nav-links" id="navLinks">
-        <a href="store/collections.html">Collections</a>
-        <a href="company/support.html">Support</a>
+        <a href="/store/collections.html">Collections</a>
+        <a href="/company/support.html">Support</a>
         <div id="authLinks" style="display: flex; align-items: center;">
             <!-- Login link will be injected here by Firebase logic -->
         </div>
@@ -106,14 +106,14 @@
 </nav>
 
 <div class="hero">
-    <img id="site-banner" src="img/lastpassion.jpg" alt="Banner">
+    <img id="site-banner" src="/img/lastpassion.jpg" alt="Banner">
 </div>
 
 <!-- Exclusive News Banner -->
 <div class="news-banner">
     <div class="news-content">
         <span class="news-tag">EXCLUSIVE</span>
-        <p><strong>Last Passion Winter Drop:</strong> Signature Hoodies now available. Limited stock only! <a href="store/collections.html?filter=winter" style="color: var(--primary); font-weight: 700;">Explore Now</a></p>
+        <p><strong>Last Passion Winter Drop:</strong> Signature Hoodies now available. Limited stock only! <a href="/store/collections.html?filter=winter" style="color: var(--primary); font-weight: 700;">Explore Now</a></p>
     </div>
 </div>
 
@@ -167,64 +167,6 @@
     <a href="https://digilayn.com" style="color: var(--brand-green); font-size: 10px; text-decoration: none; margin-top: 20px; display: block; font-weight: bold;">DIGILAYN STUDIO</a>
 </footer>
 
-<!-- Firebase SSOT -->
-<script type="module">
-  import { auth, db, COLLECTIONS } from './core/FirebaseService.js';
-  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-  // Initial UI Setup: Fetch Logo and Banner from SSOT
-  async function loadSiteBranding() {
-    try {
-      const brandingDoc = await getDoc(doc(db, COLLECTIONS.PRODUCTS, 'main'));
-      if (brandingDoc.exists()) {
-        const data = brandingDoc.data();
-        if (data.logoUrl) document.getElementById('site-logo').src = data.logoUrl;
-        if (data.bannerUrl) document.getElementById('site-banner').src = data.bannerUrl;
-      }
-    } catch (e) {
-      console.error("Error loading branding:", e);
-    }
-  }
-  loadSiteBranding();
-
-  // Auth State Listener
-  const authLinks = document.getElementById('authLinks');
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      // 1. Initial name from Auth profile - Show immediately
-      let name = user.displayName || user.email.split('@')[0];
-      authLinks.innerHTML = `<a href="authentication/profile.html" class="nav-user-link">Hi, ${name}</a>`;
-
-      // Hide loader as soon as basic auth is determined
-      document.getElementById('global-loader').classList.add('hidden');
-
-      // 2. Background fetch for the most up-to-date Full Name
-      try {
-        const userDoc = await getDoc(doc(db, COLLECTIONS.USERS, user.uid));
-        if (userDoc.exists()) {
-          const data = userDoc.data();
-          if (data.displayName) {
-             authLinks.innerHTML = `<a href="authentication/profile.html" class="nav-user-link">Hi, ${data.displayName}</a>`;
-          }
-        }
-      } catch (e) {
-        console.error("Error updating display name:", e);
-      }
-    } else {
-      const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-      authLinks.innerHTML = `<a href="authentication/login.html?returnUrl=../${currentPath}">Login</a>`;
-      // Hide loader for guest
-      document.getElementById('global-loader').classList.add('hidden');
-    }
-  });
-
-  // Make Firebase accessible to script.js
-  window.auth = auth;
-  window.db = db;
-</script>
-
-<!-- External JS -->
-<script src="script.js"></script>
+<script type="module" src="/main.js"></script>
 </body>
 </html>

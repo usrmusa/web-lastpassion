@@ -11,11 +11,11 @@
     <title>Support & Story – Last Passion</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="../favicon/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="../favicon/favicon.svg" />
-    <link rel="shortcut icon" href="../favicon/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
-    <link rel="manifest" href="../favicon/site.webmanifest" />
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <!-- External CSS -->
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="/styles.css">
     <style>
         .support-container {
             max-width: 1000px;
@@ -145,7 +145,7 @@
 
 <nav>
     <div class="logo-nav">
-        <a href="../index.html"><img id="site-logo" src="../img/lastpassion.jpg" alt="Last Passion"></a>
+        <a href="/index.html"><img id="site-logo" src="/img/lastpassion.jpg" alt="Last Passion"></a>
     </div>
 
     <div class="menu-toggle" onclick="toggleMenu()">
@@ -153,8 +153,8 @@
     </div>
 
     <div class="nav-links" id="navLinks">
-        <a href="../index.html">Home</a>
-        <a href="../store/collections.html">Collections</a>
+        <a href="/index.html">Home</a>
+        <a href="/store/collections.html">Collections</a>
         <a href="support.html" class="active">Support</a>
         <div id="authLinks" style="display: flex; align-items: center;"></div>
     </div>
@@ -288,8 +288,8 @@
 <!-- Firebase SSOT -->
 <script type="module">
   import { auth, db, COLLECTIONS } from '../core/FirebaseService.js';
-  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { doc, getDoc } from "firebase/firestore";
+  import { onAuthStateChanged } from "firebase/auth";
 
   // Branding Loader
   async function loadSiteBranding() {
@@ -309,7 +309,7 @@
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       let name = user.displayName || user.email.split('@')[0];
-      authLinks.innerHTML = `<a href="../authentication/profile.html" class="nav-user-link">Hi, ${name}</a>`;
+      authLinks.innerHTML = `<a href="/authentication/profile.html" class="nav-user-link">Hi, ${name}</a>`;
       
       // Speed optimization: Hide loader immediately
       document.getElementById('global-loader').classList.add('hidden');
@@ -317,11 +317,11 @@
       try {
         const userDoc = await getDoc(doc(db, COLLECTIONS.USERS, user.uid));
         if (userDoc.exists() && userDoc.data().displayName) {
-          authLinks.innerHTML = `<a href="../authentication/profile.html" class="nav-user-link">Hi, ${userDoc.data().displayName}</a>`;
+          authLinks.innerHTML = `<a href="/authentication/profile.html" class="nav-user-link">Hi, ${userDoc.data().displayName}</a>`;
         }
       } catch (e) {}
     } else {
-      authLinks.innerHTML = `<a href="../authentication/login.html?returnUrl=../company/support.html">Login</a>`;
+      authLinks.innerHTML = `<a href="/authentication/login.html?returnUrl=/company/support.html">Login</a>`;
       document.getElementById('global-loader').classList.add('hidden');
     }
   });
@@ -330,6 +330,6 @@
   window.db = db;
 </script>
 
-<script src="../script.js"></script>
+<script src="/script.js"></script>
 </body>
 </html>

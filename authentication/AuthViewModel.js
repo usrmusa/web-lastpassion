@@ -3,7 +3,7 @@
  * Mimics Android's ViewModel for Auth logic.
  */
 import { AuthService, db, COLLECTIONS } from '../core/FirebaseService.js';
-import { doc, getDoc, setDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { doc, getDoc, setDoc, runTransaction } from "firebase/firestore";
 
 export class AuthViewModel {
     constructor(isRegistration = false) {

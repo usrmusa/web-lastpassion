@@ -6,11 +6,11 @@
     <title>Profile - Last Passion</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="../favicon/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="../favicon/favicon.svg" />
-    <link rel="shortcut icon" href="../favicon/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
-    <link rel="manifest" href="../favicon/site.webmanifest" />
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +20,7 @@
     <!-- Cropper.js CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
     
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="/styles.css">
     <style>
         .profile-container {
             max-width: 600px;
@@ -228,10 +228,10 @@
 
 <nav>
     <div class="logo-nav">
-        <a href="../index.html"><img src="../img/lastpassion.jpg" alt="Last Passion"></a>
+        <a href="/index.html"><img src="/img/lastpassion.jpg" alt="Last Passion"></a>
     </div>
     <div class="nav-links">
-        <a href="../index.html">Back to Store</a>
+        <a href="/index.html">Back to Store</a>
     </div>
 </nav>
 
@@ -287,7 +287,7 @@
         <div id="detailJoined" class="info-value">Loading...</div>
     </div>
 
-    <button class="admin-btn" id="adminBtn" onclick="window.location.href='../admin.html'">Admin Dashboard</button>
+    <button class="admin-btn" id="adminBtn" onclick="window.location.href='/admin.html'">Admin Dashboard</button>
     <button class="logout-btn" id="logoutBtn">Logout</button>
 </div>
 
@@ -325,9 +325,9 @@
 <!-- Firebase Utilities -->
 <script type="module">
     import { auth, db, storage, COLLECTIONS, AuthService } from '../core/FirebaseService.js';
-    import { onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-    import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+    import { onAuthStateChanged, updateProfile } from "firebase/auth";
+    import { doc, getDoc, updateDoc } from "firebase/firestore";
+    import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
     let currentUser = null;
     let editingField = '';
@@ -545,7 +545,7 @@
 
     document.getElementById('logoutBtn').addEventListener('click', () => {
         AuthService.logout().then(() => {
-            window.location.href = "../index.html";
+            window.location.href = "/index.html";
         });
     });
 </script>

@@ -11,11 +11,11 @@
     <title>Last Passion – Admin Dashboard</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
-    <link rel="shortcut icon" href="favicon/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
-    <link rel="manifest" href="favicon/site.webmanifest" />
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <!-- External CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css">
     <style>
         .admin-container {
             max-width: 1200px;
@@ -257,10 +257,10 @@
 
 <nav>
     <div class="logo-nav">
-        <a href="index.html"><img src="img/lastpassion.jpg" alt="Last Passion"></a>
+        <a href="/index.html"><img src="/img/lastpassion.jpg" alt="Last Passion"></a>
     </div>
     <div class="nav-links">
-        <a href="index.html">View Store</a>
+        <a href="/index.html">View Store</a>
         <a href="#" id="logoutLink">Logout</a>
     </div>
 </nav>
@@ -277,12 +277,12 @@
         <div class="assets-grid">
             <div style="text-align: center;">
                 <h3>Store Logo</h3>
-                <img id="currentLogo" src="img/lastpassion.jpg" class="asset-preview" alt="Logo">
+                <img id="currentLogo" src="/img/lastpassion.jpg" class="asset-preview" alt="Logo">
                 <button class="admin-btn" style="width: 100%;" onclick="showAssetModal('logo')">Update Logo</button>
             </div>
             <div style="text-align: center;">
                 <h3>Welcome Banner</h3>
-                <img id="currentBanner" src="img/lastpassion.jpg" class="asset-preview" alt="Banner">
+                <img id="currentBanner" src="/img/lastpassion.jpg" class="asset-preview" alt="Banner">
                 <button class="admin-btn" style="width: 100%;" onclick="showAssetModal('banner')">Update Welcome Image</button>
             </div>
         </div>
@@ -460,9 +460,9 @@
 <!-- Firebase Utilities -->
 <script type="module">
   import { auth, db, storage, COLLECTIONS, STORAGE_PATHS, AuthService } from './core/FirebaseService.js';
-  import { collection, collectionGroup, addDoc, getDocs, deleteDoc, updateDoc, doc, query, orderBy, getDoc, setDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-  import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+  import { collection, collectionGroup, addDoc, getDocs, deleteDoc, updateDoc, doc, query, orderBy, getDoc, setDoc, arrayUnion } from "firebase/firestore";
+  import { onAuthStateChanged, signOut } from "firebase/auth";
+  import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
   let allProducts = [];
   let currentAssetType = ''; // 'logo' or 'banner'
@@ -544,21 +544,21 @@
                   const isAdmin = data.roles?.lastpassion?.isAdmin === true;
                   if (!isAdmin) {
                       alert("Access denied. Admin only.");
-                      window.location.href = "index.html";
+                      window.location.href = "/index.html";
                   } else {
                       await loadSiteConfig();
                       fetchProducts();
                       document.getElementById('global-loader').classList.add('hidden');
                   }
               } else {
-                  window.location.href = "index.html";
+                  window.location.href = "/index.html";
               }
           } catch (e) {
               console.error(e);
-              window.location.href = "index.html";
+              window.location.href = "/index.html";
           }
       } else {
-          window.location.href = "authentication/login.html?returnUrl=../admin.html";
+          window.location.href = "/authentication/login.html?returnUrl=/admin.html";
       }
   });
 
@@ -941,7 +941,7 @@
   document.getElementById('logoutLink').addEventListener('click', (e) => {
       e.preventDefault();
       AuthService.logout().then(() => {
-          window.location.href = "index.html";
+          window.location.href = "/index.html";
       });
   });
 

@@ -1,5 +1,17 @@
 {
+  "name": "lastpassion",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "firebase": "^12.7.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
   }
 }
