@@ -1,10 +1,12 @@
 import { db, COLLECTIONS, PRODUCT_VISIBILITY } from './core/FirebaseService.js';
 import { collectionGroup, getDocs, query, where, limit } from "firebase/firestore";
+import signatureTeeUrl from './img/SignatureTee.jpg';
+import hoodieUrl from './img/hoodie.jpg';
 
 // --- Fallback Data ---
 const fallbackProducts = [
-    { id: 'fb1', name: 'Signature Tee', price: 770, images: ['img/SignatureTee.jpg'] },
-    { id: 'fb2', name: 'Last Passion Hoodie', price: 699, images: ['img/hoodie.jpg'] }
+    { id: 'fb1', name: 'Signature Tee', price: 770, images: [signatureTeeUrl] },
+    { id: 'fb2', name: 'Last Passion Hoodie', price: 699, images: [hoodieUrl] }
 ];
 
 // DOM Elements
