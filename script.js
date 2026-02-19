@@ -5,7 +5,7 @@ import hoodieUrl from './img/hoodie.jpg';
 
 // --- Fallback Data ---
 const fallbackProducts = [
-    { id: 'fb1', name: 'Signature Tee', price: 770, images: [signatureTeeUrl] },
+    { id: 'fb1', name: 'International Baseball Jacket', price: 770, images: [signatureTeeUrl] },
     { id: 'fb2', name: 'Last Passion Hoodie', price: 699, images: [hoodieUrl] }
 ];
 
