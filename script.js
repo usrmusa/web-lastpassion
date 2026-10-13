@@ -152,9 +152,30 @@ function processOrder() {
     window.location.href = `https://wa.me/27699671746?text=${encodeURIComponent(message)}`;
 }
 
-// Dev Log
-console.log("%cDeveloped by Musa Mgijima", "color: #ff0099; font-size: 20px; font-weight: bold;");
-console.log("%cReach me at Digilayn Studio: https://digilayn.com", "color: #888; font-size: 14px;");
-console.log("%cNOTICE: Unauthorized use or copying of this source code is strictly prohibited.", "color: red; font-weight: bold;");
+// Digilayn developer credit, matching the console message on digilayn.co.za.
+(function () {
+    const fingerprint = `
+██████╗ ██╗ ██████╗ ██╗██╗      █████╗ ██╗   ██╗███╗   ██╗
+██╔══██╗██║██╔════╝ ██║██║     ██╔══██╗╚██╗ ██╔╝████╗  ██║
+██║  ██║██║██║  ███╗██║██║     ███████║ ╚████╔╝ ██╔██╗ ██║
+██║  ██║██║██║   ██║██║██║     ██╔══██║  ╚██╔╝  ██║╚██╗██║
+██████╔╝██║╚██████╔╝██║███████╗██║  ██║   ██║   ██║ ╚████║
+╚═════╝ ╚═╝ ╚═════╝ ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═══╝
+
+Built by Musa Mgijima
+https://digilayn.co.za
+`;
+
+    console.log(
+        "%c" + fingerprint,
+        `color:${getComputedStyle(document.documentElement).getPropertyValue("--primary").trim()};font-weight:bold;`
+    );
+
+    console.log(
+        "%cCuriosity is good. Building is better 🙂",
+        `color:${getComputedStyle(document.documentElement).getPropertyValue("--primary").trim()};font-style:italic;`
+    );
+
+})();
 
 document.addEventListener('DOMContentLoaded', initStore);
